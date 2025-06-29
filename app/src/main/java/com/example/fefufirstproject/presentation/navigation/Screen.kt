@@ -3,14 +3,8 @@ package com.example.fefufirstproject.presentation.navigation
 import androidx.annotation.DrawableRes
 import com.example.fefufirstproject.R
 
-sealed class RootScreen(val route: String) {
-    data object Auth : RootScreen("auth_screen")
-}
-
-sealed class Screen(val route: String) {
-    data object Welcome : Screen("welcome")
-    data object SignUp : Screen("signUp")
-    data object SignIn : Screen("signIn")
+sealed class Root(val route: String) {
+    data object Auth : Root("authScreen")
 }
 
 sealed class BottomNavigationRoot(val route: String, val labelResId: Int, @DrawableRes val iconSelectedId: Int, @DrawableRes val iconUnselectedId: Int) {
@@ -18,7 +12,7 @@ sealed class BottomNavigationRoot(val route: String, val labelResId: Int, @Drawa
     data object User : BottomNavigationRoot("userScreen", labelResId = R.string.bottom_navigation_user, iconSelectedId = R.drawable.person_selected, iconUnselectedId = R.drawable.person_unselected)
 
     companion object {
-        val bottomBarRoutes = setOf(Activity, User)
+        val bottomBarRoutes = setOf(BottomNavigationRoot.Activity, BottomNavigationRoot.User)
     }
 }
 
@@ -47,7 +41,7 @@ sealed class ActivityTab(val route: String, val labelResId: Int) {
     data object MyActivity : ActivityTab("myActivity", R.string.my_activity_tab_row)
 
     companion object {
-        val tabs = listOf(MyActivity, UserActivity)
+        val tabs = listOf(ActivityTab.MyActivity, ActivityTab.UserActivity)
     }
 }
 

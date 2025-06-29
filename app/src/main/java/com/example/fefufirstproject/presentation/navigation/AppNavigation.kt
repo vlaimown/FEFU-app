@@ -2,60 +2,73 @@ package com.example.fefufirstproject.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-
-import com.example.fefufirstproject.presentation.features.sign_in.SignIn
-import com.example.fefufirstproject.presentation.features.signup.SignUp
-import com.example.fefufirstproject.presentation.features.welcome.Welcome
+import com.example.fefufirstproject.presentation.features.activity.navigation.addActivityRoot
+import com.example.fefufirstproject.presentation.features.activity.viewmodel.ActivityViewModel
+import com.example.fefufirstproject.presentation.features.signin.navigation.addSignin
+import com.example.fefufirstproject.presentation.features.signup.navigation.addSignup
+import com.example.fefufirstproject.presentation.features.user.navigation.addUserRoot
+import com.example.fefufirstproject.presentation.features.welcome.navigation.addWelcome
+import com.example.fefufirstproject.presentation.ui.widget.BottomNavigationBar
 
 @Composable
 fun AppNavigation(innerPaddingValues: PaddingValues) {
     val navController = rememberNavController()
     val isLoggedIn = false
 
-    NavHost(
-        navController = navController,
-        startDestination = if (!isLoggedIn) RootScreen.Auth.route else RootScreen.Auth.route,
-        modifier = Modifier.padding(innerPaddingValues)
-    ) {
-        addAuth(navController)
+    var showBottomBar by remember { mutableStateOf(false) }
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        showBottomBar = when (currentRoute) {
+            MainScreen.ActivityScreen.route, MainScreen.UserScreen.route -> true
+            else -> false
+        }
+    }
+    val activityViewModel = hiltViewModel<ActivityViewModel>()
+
+    Scaffold(
+        bottomBar = {
+            if (showBottomBar) {
+                BottomNavigationBar(navController, currentRoute = currentRoute ?: "")
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = if (!isLoggedIn) Root.Auth.route else BottomNavigationRoot.Activity.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            addAuthRoot(navController)
+            addActivityRoot(navController, activityViewModel)
+            addUserRoot(navController)
+        }
     }
 }
 
-private fun NavGraphBuilder.addAuth(navController: NavController) {
+fun NavGraphBuilder.addAuthRoot(navController: NavController) {
     navigation(
-        route = RootScreen.Auth.route,
-        startDestination = Screen.Welcome.route
+        route = Root.Auth.route,
+        startDestination = AuthScreen.Welcome.route
     ) {
         addWelcome(navController)
-        addSignUp(navController)
-        addSignIn(navController)
-    }
-}
-
-private fun NavGraphBuilder.addWelcome(navController: NavController) {
-    composable(Screen.Welcome.route) {
-        Welcome(navController = navController)
-    }
-}
-
-private fun NavGraphBuilder.addSignUp(navController: NavController) {
-    composable(Screen.SignUp.route) {
-        SignUp(navController = navController)
-    }
-}
-
-private fun NavGraphBuilder.addSignIn(navController: NavController) {
-    composable(Screen.SignIn.route) {
-        SignIn(navController = navController)
+        addSignup(navController)
+        addSignin(navController)
     }
 }
