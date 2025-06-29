@@ -1,4 +1,4 @@
-package com.example.fefufirstproject.ui.screen.sign_in
+package com.example.fefufirstproject.presentation.features.sign_in
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.fefufirstproject.R
-import com.example.fefufirstproject.navigation.MainScreen
-import com.example.fefufirstproject.navigation.Screen
-import com.example.fefufirstproject.ui.widget.AppBar
+import com.example.fefufirstproject.presentation.navigation.MainScreen
+import com.example.fefufirstproject.presentation.navigation.Screen
 import com.example.fefufirstproject.ui.widget.BaseButton
 import com.example.fefufirstproject.ui.widget.BaseTextField
 import com.example.fefufirstproject.ui.widget.PasswordTextField

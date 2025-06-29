@@ -1,4 +1,4 @@
-package com.example.fefufirstproject.ui.screen.sign_in
+package com.example.fefufirstproject.presentation.features.sign_in
 
 import androidx.compose.runtime.Immutable
 

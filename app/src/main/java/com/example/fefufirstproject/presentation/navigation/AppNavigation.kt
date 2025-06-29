@@ -1,4 +1,4 @@
-package com.example.fefufirstproject.navigation
+package com.example.fefufirstproject.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -13,9 +13,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 
-import com.example.fefufirstproject.ui.screen.sign_in.SignIn
-import com.example.fefufirstproject.ui.screen.SignUp
-import com.example.fefufirstproject.ui.screen.Welcome
+import com.example.fefufirstproject.presentation.features.sign_in.SignIn
+import com.example.fefufirstproject.presentation.features.signup.SignUp
+import com.example.fefufirstproject.presentation.features.welcome.Welcome
 
 @Composable
 fun AppNavigation(innerPaddingValues: PaddingValues) {

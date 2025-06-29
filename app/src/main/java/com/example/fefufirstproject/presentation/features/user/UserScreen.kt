@@ -1,4 +1,4 @@
-package com.example.fefufirstproject.ui.screen
+package com.example.fefufirstproject.presentation.features.user
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.fefufirstproject.navigation.UserScreen
+import com.example.fefufirstproject.presentation.navigation.UserScreen
 
 @Composable
 fun UserScreen() {

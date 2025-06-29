@@ -3,6 +3,8 @@ package com.example.fefufirstproject.ui.widget
 import com.example.fefufirstproject.R
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 
 import androidx.compose.material3.Icon
@@ -18,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 
 import com.example.fefufirstproject.ui.theme.errorColor
 import com.example.fefufirstproject.ui.theme.mainColor
@@ -36,14 +40,15 @@ private fun CommonTextField(
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    trailingIcon: @Composable (() -> Unit)? = null
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    maxLines: Int = 1,
+    singleLine: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = {
-            Text(text = label, style = Typography.labelSmall)
-        },
+        label = { Text(text = label, style = Typography.labelSmall) },
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedTextColor = textFieldBorderColor,
             focusedTextColor = mainColor,
@@ -63,10 +68,12 @@ private fun CommonTextField(
             }
         },
         modifier = modifier.fillMaxWidth(),
-        singleLine = true,
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
-        trailingIcon = trailingIcon
+        keyboardActions = keyboardActions,
+        trailingIcon = trailingIcon,
+        singleLine = singleLine,
+        maxLines = maxLines
     )
 }
 
@@ -82,6 +89,33 @@ fun BaseTextField(
         onValueChange = onValueChange,
         label = label,
         errorMessage = validate
+    )
+}
+
+@Composable
+fun MultilineTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    validate: String?,
+    keyboardOptions: KeyboardOptions,
+    keyboardActions: KeyboardActions,
+    maxLines: Int = 5,
+    singleLine: Boolean = false,
+    modifier: Modifier
+) {
+    CommonTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = label,
+        errorMessage = validate,
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
+        maxLines = maxLines,
+        singleLine = singleLine,
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 90.dp)
     )
 }
 
@@ -125,5 +159,23 @@ fun PasswordTextField(
                 )
             }
         }
+    )
+}
+
+@Composable
+fun CommentInputField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    MultilineTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = stringResource(R.string.detail_activity_comment),
+        validate = null,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+        keyboardActions = KeyboardActions(onSend = { onSubmit() }),
+        modifier = modifier
     )
 }

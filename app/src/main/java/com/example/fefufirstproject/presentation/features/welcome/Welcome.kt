@@ -1,4 +1,4 @@
-package com.example.fefufirstproject.ui.screen
+package com.example.fefufirstproject.presentation.features.welcome
 
 import androidx.navigation.NavController
 
@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 
 import com.example.fefufirstproject.R
-import com.example.fefufirstproject.navigation.Screen
+import com.example.fefufirstproject.presentation.navigation.Screen
 
 import com.example.fefufirstproject.ui.theme.Typography
 import com.example.fefufirstproject.ui.widget.BaseButton

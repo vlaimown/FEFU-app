@@ -1,4 +1,4 @@
-package com.example.fefufirstproject.ui.screen
+package com.example.fefufirstproject.presentation.features.signup
 
 import androidx.navigation.NavController
 
