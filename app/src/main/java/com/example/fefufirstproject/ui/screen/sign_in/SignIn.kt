@@ -1,8 +1,4 @@
-package com.example.fefufirstproject.ui.screen
-
-import androidx.navigation.NavController
-
-import androidx.compose.material3.Scaffold
+package com.example.fefufirstproject.ui.screen.sign_in
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -12,40 +8,38 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-
+import androidx.navigation.NavController
 import com.example.fefufirstproject.R
+import com.example.fefufirstproject.navigation.MainScreen
+import com.example.fefufirstproject.navigation.Screen
 import com.example.fefufirstproject.ui.widget.AppBar
 import com.example.fefufirstproject.ui.widget.BaseButton
 import com.example.fefufirstproject.ui.widget.BaseTextField
 import com.example.fefufirstproject.ui.widget.PasswordTextField
+import com.example.fefufirstproject.ui.widget.ScaffoldWithOptionalAppBar
 
 @Composable
 fun SignIn(navController: NavController) {
-    Scaffold(
-        topBar = {
-            AppBar(title = stringResource(id = R.string.signin_screen_title)) {
-                navController.navigateUp()
-            }
-        },
-        content = { paddingValues ->
-            var login by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
+    ScaffoldWithOptionalAppBar(
+        showAppBar = true,
+        onClickBackButton = { navController.navigate(Screen.Welcome.route) },
+        content = {
 
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues).padding(dimensionResource(id = R.dimen.padding_small)),
-
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(dimensionResource(id = R.dimen.padding_small)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacer_small))
             ) {
@@ -55,6 +49,8 @@ fun SignIn(navController: NavController) {
                         id = R.string.image_description
                     )
                 )
+                var login by remember { mutableStateOf("") }
+                var password by remember { mutableStateOf("") }
 
                 BaseTextField(
                     value = login,
@@ -75,9 +71,13 @@ fun SignIn(navController: NavController) {
                 BaseButton(
                     true,
                     text = stringResource(id = R.string.signin_screen_button),
-                    modifier = Modifier.fillMaxWidth().height(dimensionResource(id = R.dimen.button_height))
-                ) {
-                }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(dimensionResource(id = R.dimen.button_height)),
+                    onClickListener = {
+                        navController.navigate(MainScreen.ActivityScreen.route)
+                    }
+                )
             }
         }
     )

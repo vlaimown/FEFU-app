@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 
-import com.example.fefufirstproject.ui.screen.SignIn
+import com.example.fefufirstproject.ui.screen.sign_in.SignIn
 import com.example.fefufirstproject.ui.screen.SignUp
 import com.example.fefufirstproject.ui.screen.Welcome
 
