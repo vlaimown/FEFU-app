@@ -1,0 +1,122 @@
+package com.example.fefufirstproject.presentation.features.activity.viewmodel
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.fefufirstproject.presentation.features.activity.state.ActivityState
+import com.example.fefufirstproject.domain.ActivityRepository
+import com.example.fefufirstproject.domain.CommentRepository
+import com.example.fefufirstproject.domain.entity.Activity
+import com.example.fefufirstproject.domain.entity.Comment
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ActivityViewModel @Inject constructor(
+    private val activityRepository: ActivityRepository,
+    private val commentRepository: CommentRepository
+) : ViewModel() {
+    private val _myState = MutableStateFlow(ActivityState())
+    val myState: StateFlow<ActivityState> = _myState.asStateFlow()
+
+    private val _userState = MutableStateFlow(ActivityState())
+    val userState: StateFlow<ActivityState> = _userState.asStateFlow()
+
+    private val _activityState = MutableStateFlow(Activity())
+    val activityState: StateFlow<Activity> = _activityState.asStateFlow()
+
+    init {
+        getMyActivity()
+        getUserActivity()
+    }
+
+    fun getActivityById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            activityRepository.getActivity(idActivity = id)
+                .catch { e ->
+                    Log.e("ActivityViewModel", e.message ?: "")
+                }
+                .collect { activity ->
+                    _activityState.update {
+                        activity
+                    }
+                }
+        }
+    }
+
+    private fun getMyActivity() {
+        viewModelScope.launch(Dispatchers.IO) {
+            activityRepository.getActivities(myActivities = true)
+                .onStart { _myState.update { it.copy(isLoading = true) } }
+                .catch { error ->
+                    Log.e("ActivityViewModel", error.message ?: "")
+                    _myState.update {
+                        it.copy(
+                            isLoading = false,
+                            isError = error.message ?: ""
+                        )
+                    }
+                }
+                .collect { activities ->
+                    _myState.update {
+                        it.copy(
+                            isLoading = false,
+                            isError = "",
+                            activities = activities
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun getUserActivity() {
+        viewModelScope.launch(Dispatchers.IO) {
+            activityRepository.getActivities(myActivities = false)
+                .onStart { _userState.update { it.copy(isLoading = true) } }
+                .catch { error ->
+                    Log.e("ActivityViewModel", error.message ?: "")
+                    _userState.update {
+                        it.copy(
+                            isLoading = false,
+                            isError = error.message ?: ""
+                        )
+                    }
+                }
+                .collect { activities ->
+                    _userState.update {
+                        it.copy(
+                            isLoading = false,
+                            isError = "",
+                            activities = activities
+                        )
+                    }
+                }
+        }
+    }
+
+    fun addComment(comment: Comment, activityId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                commentRepository.addComment(comment, activityId)
+                _activityState.update { currentState ->
+                    val updatedComments = currentState.comments.toMutableList().apply {
+                        add(comment)
+                    }
+                    currentState.copy(comments = updatedComments)
+                }
+            } catch (e: Exception) {
+                _activityState.update { currentState ->
+                    currentState.copy(comments = currentState.comments)
+                }
+            }
+        }
+    }
+}
